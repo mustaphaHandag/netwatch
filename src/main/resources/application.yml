@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: netwatch
+
+  profiles:
+    active: local
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+netwatch:
+  scheduler:
+    pool-size: 10
+  http-client:
+    connect-timeout-ms: 5000
+    read-timeout-ms: 5000
+  notifications:
+    email:
+      enabled: false
+      to: ${ALERT_EMAIL_TO:}
+    webhook:
+      enabled: false
+      url: ${ALERT_WEBHOOK_URL:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:mem:netwatch
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
