@@ -12,6 +12,7 @@ Ce projet reprend l'esprit de ce que j'ai developpe en stage chez Orange Wholesa
 - Diffusion en temps reel des changements de statut via WebSocket (`/ws/status`)
 - Alertes email et webhook sur changement de statut (activables independamment)
 - Endpoint `/actuator/health` et `/actuator/prometheus` prets pour le monitoring
+- Documentation API interactive via Swagger UI (`/swagger-ui.html`)
 
 ## Stack technique
 
@@ -23,6 +24,7 @@ Ce projet reprend l'esprit de ce que j'ai developpe en stage chez Orange Wholesa
 - **CI/CD** : GitHub Actions (`.github/workflows/ci.yml`)
 - **Observabilite** : metriques exposees via Spring Actuator + Micrometer, a brancher sur Prometheus/Grafana
 - **Alerting** : email (Spring Mail) et webhook, chacun branche comme adaptateur derriere un evenement de changement de statut (voir ADR 0001)
+- **Documentation API** : springdoc-openapi, spec OpenAPI 3 generee depuis le code + Swagger UI
 
 ## Architecture
 
@@ -273,6 +275,22 @@ curl -X POST http://localhost:8080/api/services \
   -H "Content-Type: application/json" \
   -d '{"name": "Mon site", "url": "https://example.com", "checkIntervalSeconds": 60}'
 ```
+
+## API
+
+| Methode | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/services` | Liste tous les services surveilles |
+| `POST` | `/api/services` | Cree un service (nom, url, `checkIntervalSeconds`) et le planifie immediatement |
+| `GET` | `/api/services/{id}` | Detail d'un service |
+| `PUT` | `/api/services/{id}` | Met a jour un service (nom, url, `checkIntervalSeconds`) et replanifie le check a chaud |
+| `DELETE` | `/api/services/{id}` | Supprime un service et annule sa tache planifiee |
+| `GET` | `/api/services/{id}/checks` | Historique des 50 derniers checks du service |
+| `WS` | `/ws/status` | Diffusion temps reel des changements de statut |
+| `GET` | `/actuator/health`, `/actuator/prometheus` | Sante et metriques |
+
+Documentation interactive (Swagger UI) une fois l'application lancee : `http://localhost:8080/swagger-ui.html`
+(spec brute : `http://localhost:8080/v3/api-docs`).
 
 ## Lancer avec Docker
 
