@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and run tests
+        run: mvn -B clean verify
+
+      # --- Phase suivante : build + push de l'image Docker ---
+      # - name: Build Docker image
+      #   run: docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
+      # - name: Push Docker image
+      #   run: docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+      # --- Phase suivante : deploiement sur le cluster Kubernetes ---
+      # - name: Deploy to Kubernetes
+      #   run: kubectl apply -f infra/k8s/
