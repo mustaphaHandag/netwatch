@@ -39,6 +39,11 @@ public class ServiceController {
         return ServiceMapper.toResponse(serviceManagementService.findByIdOrThrow(id));
     }
 
+    @PutMapping("/{id}")
+    public ServiceResponse updateService(@PathVariable Long id, @Valid @RequestBody ServiceRequest request) {
+        return ServiceMapper.toResponse(serviceManagementService.update(id, request));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteService(@PathVariable Long id) {

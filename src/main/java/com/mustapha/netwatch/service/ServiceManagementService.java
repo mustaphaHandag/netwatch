@@ -54,6 +54,19 @@ public class ServiceManagementService {
     }
 
     @Transactional
+    public MonitoredService update(Long id, ServiceRequest request) {
+        MonitoredService service = findByIdOrThrow(id);
+        service.setName(request.getName());
+        service.setUrl(request.getUrl());
+        service.setCheckIntervalSeconds(request.getCheckIntervalSeconds());
+        MonitoredService saved = serviceRepository.save(service);
+        if (saved.isActive()) {
+            scheduler.schedule(saved);
+        }
+        return saved;
+    }
+
+    @Transactional
     public void delete(Long id) {
         MonitoredService service = findByIdOrThrow(id);
         scheduler.cancel(service.getId());
