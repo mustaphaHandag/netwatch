@@ -2,7 +2,7 @@ package com.mustapha.netwatch.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.URL;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Table(name = "monitored_services")

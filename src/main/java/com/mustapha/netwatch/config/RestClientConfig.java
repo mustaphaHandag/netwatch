@@ -22,8 +22,8 @@ public class RestClientConfig {
                                       @Value("${netwatch.http-client.connect-timeout-ms:5000}") long connectTimeoutMs,
                                       @Value("${netwatch.http-client.read-timeout-ms:5000}") long readTimeoutMs) {
         return builder
-                .connectTimeout(Duration.ofMillis(connectTimeoutMs))
-                .readTimeout(Duration.ofMillis(readTimeoutMs))
+                .setConnectTimeout(Duration.ofMillis(connectTimeoutMs))
+                .setReadTimeout(Duration.ofMillis(readTimeoutMs))
                 .build();
     }
 }
