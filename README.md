@@ -4,7 +4,7 @@ Plateforme de supervision reseau : une API Spring Boot qui surveille la disponib
 
 Ce projet reprend l'esprit de ce que j'ai developpe en stage chez Orange Wholesale (APIs RESTful, WebSocket temps reel, notifications), mais concu et deploye de A a Z, avec une vraie chaine cloud-native autour.
 
-![alt text](image.png)
+![Architecture NetWatch : du git push a la production, sur GKE Autopilot](Netwatche-Archi.jpg)
 
 ## Fonctionnalites
 
