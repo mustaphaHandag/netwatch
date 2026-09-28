@@ -41,6 +41,9 @@ management:
     web:
       exposure:
         include: health,info,metrics,prometheus
+  health:
+    mail:
+      enabled: false
 
 ---
 spring:

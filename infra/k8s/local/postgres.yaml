@@ -1,0 +1,53 @@
+# Postgres in-cluster pour la validation locale (kind/minikube).
+# Stockage ephemere (emptyDir) : perte des donnees si le pod redemarre,
+# acceptable pour un smoke test. La prod utilise Cloud SQL (voir ../secret.example.yaml).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netwatch-postgres
+  labels:
+    app: netwatch-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netwatch-postgres
+  template:
+    metadata:
+      labels:
+        app: netwatch-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: netwatch
+            - name: POSTGRES_USER
+              value: netwatch
+            - name: POSTGRES_PASSWORD
+              value: netwatch
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "netwatch"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netwatch-postgres
+spec:
+  selector:
+    app: netwatch-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

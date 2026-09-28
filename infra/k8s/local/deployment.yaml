@@ -1,0 +1,64 @@
+# Variante locale de ../deployment.yaml pour kind/minikube :
+# - image chargee localement (netwatch:local), jamais pull depuis un registry
+# - 1 seul replica (le double-check/double-alerte multi-replicas est une
+#   limite connue, cf. README > "Limites connues", pas a resoudre ici)
+# - probes plus tolerantes : demarrage a froid plus lent sur une machine de dev
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netwatch
+  labels:
+    app: netwatch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netwatch
+  template:
+    metadata:
+      labels:
+        app: netwatch
+    spec:
+      containers:
+        - name: netwatch
+          image: netwatch:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: netwatch-db-secret
+                  key: db-url
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: netwatch-db-secret
+                  key: db-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: netwatch-db-secret
+                  key: db-password
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 120
+            periodSeconds: 20

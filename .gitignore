@@ -13,7 +13,8 @@ infra/k8s/secret.yaml
 .terraform.lock.hcl
 .claude/
 
-
+# documentation et notes 
 structure-projet.md
-
+kubernetes-docs.md
+upskills/
 
