@@ -4,6 +4,8 @@ Plateforme de supervision reseau : une API Spring Boot qui surveille la disponib
 
 Ce projet reprend l'esprit de ce que j'ai developpe en stage chez Orange Wholesale (APIs RESTful, WebSocket temps reel, notifications), mais concu et deploye de A a Z, avec une vraie chaine cloud-native autour.
 
+![alt text](image.png)
+
 ## Fonctionnalites
 
 - CRUD des services a surveiller (`/api/services`)
@@ -306,7 +308,7 @@ Ceci demarre l'API (profil `prod`) et une base PostgreSQL locale.
 - [x] Phase 2 : alertes email/webhook quand un service change de statut, gestion de l'intervalle par service
   (voir [ADR 0001](docs/architecture/0001-modular-monolith-event-driven-notifications.md) ;
   canaux desactives par defaut, a activer via `netwatch.notifications.*`)
-- [ ] Phase 3 : conteneurisation validee en local (kind/minikube) avant le cloud
+- [x] Phase 3 : conteneurisation validee en local (kind/minikube) avant le cloud
 - [ ] Phase 4 : provisioning Terraform du cluster GKE et de Cloud SQL
 - [ ] Phase 5 : pipeline CI/CD complet (build image, push registry, deploiement automatique)
 - [ ] Phase 6 : dashboards Prometheus/Grafana (latence, taux de disponibilite, incidents)
